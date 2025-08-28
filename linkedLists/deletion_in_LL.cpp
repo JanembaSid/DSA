@@ -38,56 +38,69 @@ void print(Node* head){
     std::cout<<std::endl;
 }
 
-Node * insertHead(Node* head,int val){
-    if(head==NULL){return new Node(val);}
-    return new Node(val,head);
-}
-
-Node* insertTail(Node* head,int val){
-    if(head==NULL ) return new Node(val);
-    Node* temp = head;
-
-    while(temp->next!=NULL){
-        temp=temp->next;
-    }
-    Node* tail = new Node(val);
-    temp->next=tail;
+Node * delHead(Node* head){
+    if(head==NULL){return head;}
+    Node* temp =head;
+    head=head->next;
+    free(temp);
     return head;
 }
 
-Node* insertPosition(Node* head,int pos,int val){
-    if(head==NULL && pos==1) return new Node(val);
-    if(pos==1){
-        return new Node(val,head);
-    }
+Node* delTail(Node* head){
+    if(head==NULL || head->next==NULL) return NULL;
     Node* temp = head;
-    int count =0;
 
+    while(temp->next->next!=NULL){
+        temp=temp->next;
+    }
+    delete temp->next;
+    temp->next=nullptr;
+    return head;
+}
 
+Node* delPosition(Node* head,int pos){
+    if(head==NULL) return head;
+    Node* temp = head;
+    if(pos==1){
+        head=head->next;
+        delete temp;
+        return head;
+    }
+    int count = 0;
+    Node * prev = nullptr;
     while(temp){
         count++;
-        if(pos==count-1){
-            Node * newNode = new Node(val,temp->next);
-            temp->next = newNode;
+        if(count==pos){
+            prev->next=prev->next->next;
+            delete temp;
             break;
         }
-        temp =temp->next;
+        prev = temp;
+        temp=temp->next;
     }
+
     return head;
 }
 
-Node* insertbeforeVal(Node* head,int val,int insVal){
+Node* delVal(Node* head,int val){
     if(head==NULL) return head;
-    if(head->data==val) return new Node(insVal,head);
     Node* temp = head;
-    while(temp->next!=NULL){
-        if(temp->next->data==val){
-            Node* newVal = new Node(insVal,temp->next);
-            temp->next=newVal;
+    if(head->data==val){
+        head=head->next;
+        delete temp;
+        return head;
+    }
+    Node * prev = nullptr;
+    while(temp){
+        if(temp->data==val){
+            prev->next=prev->next->next;
+            delete temp;
             break;
         }
+        prev = temp;
         temp=temp->next;
     }
+
     return head;
 }
 int main (){
@@ -95,21 +108,21 @@ int main (){
     Node* head = arr2LL(arr);
 
     //delete head case
-    head = insertHead(head,227);
+    head = delHead(head);
     print(head);
 
     //delete tail case
-    head = insertTail(head,889);
+    head = delTail(head);
     print(head);
 
 
     std::vector<int> arr2 = {69,32,12,4,39};
     Node* heads = arr2LL(arr2);
     //delete val at a particular postion
-    heads=insertPosition(heads,1,55);
+    heads=delPosition(heads,3);
     print(heads);
 
     //delete a particular val
-    heads = insertbeforeVal(heads,32,69);
+    heads = delVal(heads,69);
     print(heads);
 }
