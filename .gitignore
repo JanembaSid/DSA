@@ -1,7 +1,7 @@
 # Ignore everything
-*
+*/**.exe
 # But not these directories
 !**.cpp
 
-# Allow .gitignore itself
-!.gitignore
+# don't allow .gitignore itself
+.gitignore
