@@ -1,0 +1,7 @@
+# Ignore everything
+*
+# But not these directories
+!**.cpp
+
+# Allow .gitignore itself
+!.gitignore
